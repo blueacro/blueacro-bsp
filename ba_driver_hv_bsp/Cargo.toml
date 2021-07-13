@@ -21,7 +21,9 @@ version = "0.6"
 optional = true
 
 [dependencies.atsamd-hal]
-path = "../../atsamd/hal"
+#features = ["same51j"]
+git = "https://github.com/atsamd-rs/atsamd"
+revision = "master"
 version = "0.12"
 default-features = false
 

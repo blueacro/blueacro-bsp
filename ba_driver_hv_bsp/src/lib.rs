@@ -1,6 +1,5 @@
 #![no_std]
 #![recursion_limit = "1024"]
-
 /// Pin definitions
 pub mod pins;
 

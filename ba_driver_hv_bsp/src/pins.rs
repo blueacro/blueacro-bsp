@@ -4,9 +4,6 @@ use super::{hal, pac::MCLK, target_device};
 
 use hal::define_pins;
 use hal::gpio::{self, *};
-
-use hal::time::Hertz;
-
 use hal::clock::GenericClockController;
 
 #[cfg(feature = "usb")]
@@ -27,7 +24,8 @@ define_pins!(
     pin led2 = b11,
     pin led3 = b12,
 
-    pin dim_iset = b13,
+    pin fault = a12,
+
     pin dim_en = b14,
     pin dim = b15,
 
@@ -68,6 +66,9 @@ impl Pins {
             usb,
             led: led,
             sw0: self.sw0,
+            dim: self.dim,
+            dim_en: self.dim_en,
+            fault: self.fault,
         }
     }
 }
@@ -79,6 +80,13 @@ pub struct Sets {
 
     /// USB pins
     pub usb: USB,
+
+    /// DIM pin
+    pub dim: Pb15<Input<Floating>>,
+    pub dim_en: Pb14<Input<Floating>>,
+
+    /// Fault pin
+    pub fault: Pa12<Input<Floating>>,
 
     /// Port
     pub port: Port,
@@ -114,8 +122,8 @@ impl USB {
         UsbBusAllocator::new(UsbBus::new(
             usb_clock,
             mclk,
-            self.dm.into_function(port),
-            self.dp.into_function(port),
+            self.dm,
+            self.dp,
             usb,
         ))
     }
